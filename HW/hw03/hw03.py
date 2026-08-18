@@ -25,6 +25,14 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n % 10 == 8:
+        if n // 10 == 0:
+            return 1
+        return num_eights(n // 10) + 1
+    else:
+        if n // 10 == 0:
+            return 0
+        return num_eights(n // 10)
 
 
 def digit_distance(n):
@@ -47,6 +55,18 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    the_last = n % 10
+    last_but_one = n // 10 % 10
+    if the_last > last_but_one:
+        distance = the_last - last_but_one
+    else:
+        distance = last_but_one - the_last
+    if n // 10 == 0:
+        return distance
+    else:
+        return digit_distance(n // 10) + distance
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -71,6 +91,14 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(k):
+        if k < n:
+            return odd_func(k) + even_func(k+1) + helper(k+2)
+        elif k == n:
+            return odd_func(k)
+        else:
+            return 0
+    return helper(1)
 
 
 def next_smaller_dollar(bill):
@@ -107,6 +135,25 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(surplus, current_dollar):
+        if surplus == 0:
+            return 1
+        elif surplus < 0 or current_dollar is None:
+            return 0
+        return helper(surplus - current_dollar, current_dollar) + helper(surplus, next_smaller_dollar(current_dollar))
+    if total >= 100:
+        start_dollar = 100
+    elif total >= 50:
+        start_dollar = 50
+    elif total >= 20:
+        start_dollar = 20
+    elif total >= 10:
+        start_dollar = 10
+    elif total >= 5:
+        start_dollar = 5
+    else:
+        start_dollar = 1
+    return helper(total, start_dollar)
 
 
 def next_larger_dollar(bill):
@@ -143,6 +190,13 @@ def count_dollars_upward(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(surplus, current_dollar):
+        if surplus == total:
+            return 1
+        elif surplus > total or current_dollar is None:
+            return 0
+        return helper(surplus + current_dollar, current_dollar) + helper(surplus, next_larger_dollar(current_dollar))
+    return helper(0, 1)
 
 
 def print_move(origin, destination):
